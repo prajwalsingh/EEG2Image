@@ -1,10 +1,8 @@
 ## EEG2Image
 <br/>
-EEG2IMAGE: Image Reconstruction from EEG Brain Signals
+EEG2IMAGE: Image Reconstruction from EEG Brain Signals [![Arxiv Paper]()] [![Project Page]()]
 
-[![Arxiv Paper]()] [![Project Page]()]
-
-<br/><br/>
+<br/>
 
 * EEG2Image best_ckpt [![Link](https://drive.google.com/file/d/1gdmm_qlGGUF0AM8X0a3JDg0Dc2HOpn7k/view?usp=share_link)]
 * Inception Score [![Link](https://drive.google.com/file/d/1nQWX3eYSLH1LX56HJ1fQLIgzmiYKgpY_/view?usp=share_link)]
