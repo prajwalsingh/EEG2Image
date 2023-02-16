@@ -12,3 +12,5 @@ EEG2IMAGE: Image Reconstruction from EEG Brain Signals
 
 
 ## References
+
+* ThoughtViz ![Link](https://github.com/ptirupat/ThoughtViz) 
