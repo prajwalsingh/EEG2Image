@@ -1,0 +1,3 @@
+model_checkpoint_path: "ckpt-2420"
+all_model_checkpoint_paths: "ckpt-2420"
+all_model_checkpoint_timestamps: 1661862916.8696432
