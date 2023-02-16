@@ -1,6 +1,9 @@
 ## EEG2Image
 <br/>
-EEG2IMAGE: Image Reconstruction from EEG Brain Signals [![Arxiv Paper]()] [![Project Page]()]
+
+EEG2IMAGE: Image Reconstruction from EEG Brain Signals 
+
+[![Arxiv Paper]()] [![Project Page]()]
 
 <br/>
 
