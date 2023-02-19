@@ -3,7 +3,7 @@
 
 EEG2IMAGE: Image Reconstruction from EEG Brain Signals [ICASSP 2023]
 
-[![Arxiv Paper]()] [![Project Page]()]
+[![Paper]()]
 
 <br/>
 
