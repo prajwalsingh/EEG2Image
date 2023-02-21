@@ -40,4 +40,4 @@ Reconstructing images using brain signals of imagined visuals may provide an aug
 
 ## References
 
-* ThoughtViz [![Link](https://github.com/ptirupat/ThoughtViz)]
+* ThoughtViz [[Link](https://github.com/ptirupat/ThoughtViz)]
