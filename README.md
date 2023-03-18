@@ -24,7 +24,7 @@ Reconstructing images using brain signals of imagined visuals may provide an aug
 
 | <img src="https://github.com/prajwalsingh/EEG2Image/blob/main/results/eeg_lstm_classification.png"/> | <img src="https://github.com/prajwalsingh/EEG2Image/blob/main/results/embedding_space.png"/> |
 |-|-|
-| t-SNE visualization of Object test dataset EEG feature space which is learned using label supervision with test classification accuracy 0.75 and k-means accuracy 0.13. | t-SNE visualization of Object test dataset EEG feature space which is learned using triplet loss with test k-means accuracy 0.25. Each cluster’s equivalent EEG-based generated images are also visualized in this plot. |
+| t-SNE visualization of Object test dataset EEG feature space which is learned using label supervision with test classification accuracy 0.75 and k-means accuracy 0.18. | t-SNE visualization of Object test dataset EEG feature space which is learned using triplet loss with test k-means accuracy 0.53. Each cluster’s equivalent EEG-based generated images are also visualized in this plot. |
 
 
 | ThoughtViz  |   EEG2Image (Ours)      |
