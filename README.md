@@ -36,6 +36,7 @@ Reconstructing images using brain signals of imagined visuals may provide an aug
 ## Note
 
 * Unstructured code.
+* You can find anaconda environment yml file in anaconda folder.
 
 
 ## References
