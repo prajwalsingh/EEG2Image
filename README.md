@@ -7,9 +7,9 @@ EEG2IMAGE: Image Reconstruction from EEG Brain Signals [ICASSP 2023]
 
 <br/>
 
-* EEG2Image best_ckpt [[Link]([https://drive.google.com/file/d/1gdmm_qlGGUF0AM8X0a3JDg0Dc2HOpn7k/view?usp=share_link](https://iitgnacin-my.sharepoint.com/:u:/g/personal/singh_prajwal_iitgn_ac_in/EWC0lT5vEN1c206cJ0tdmdQBkVhvCL5TVnNhBI7cWSTKFg?e=XbJZkP))]
-* Inception Score [[Link]([https://drive.google.com/file/d/1nQWX3eYSLH1LX56HJ1fQLIgzmiYKgpY_/view?usp=share_link](https://iitgnacin-my.sharepoint.com/:u:/g/personal/singh_prajwal_iitgn_ac_in/EfWLlhNk0CxXqgMnsKgt8k8BxSqflp98ACpl9ZLScWSHtA?e=DPAdFl))]
-* Preprocessed thoughtviz EEG Data [[Link]([https://drive.google.com/file/d/1j_vNNXROc3MKe4lW7DwwLaVfpXguD0A8/view?usp=share_link](https://iitgnacin-my.sharepoint.com/:u:/g/personal/singh_prajwal_iitgn_ac_in/Ea4Sp2UH__ZbRQGZXu9o-6cByJK4E6E4GtxrcVony9_Q8g?e=ih4Hxn))]
+* EEG2Image best_ckpt [[Link](https://iitgnacin-my.sharepoint.com/:u:/g/personal/singh_prajwal_iitgn_ac_in/EWC0lT5vEN1c206cJ0tdmdQBkVhvCL5TVnNhBI7cWSTKFg?e=XbJZkP)]
+* Inception Score [[Link](https://iitgnacin-my.sharepoint.com/:u:/g/personal/singh_prajwal_iitgn_ac_in/EfWLlhNk0CxXqgMnsKgt8k8BxSqflp98ACpl9ZLScWSHtA?e=DPAdFl)]
+* Preprocessed thoughtviz EEG Data [[Link](https://iitgnacin-my.sharepoint.com/:u:/g/personal/singh_prajwal_iitgn_ac_in/Ea4Sp2UH__ZbRQGZXu9o-6cByJK4E6E4GtxrcVony9_Q8g?e=ih4Hxn)]
 
 
 ## Abstract
