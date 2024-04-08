@@ -45,14 +45,14 @@ if __name__ == '__main__':
 	n_channels  = 14
 	n_feat      = 128
 	batch_size  = 256
-	test_batch_size  = 1
+	test_batch_size  = 256
 	n_classes   = 10
 
 	# data_cls = natsorted(glob('data/thoughtviz_eeg_data/*'))
 	# cls2idx  = {key.split(os.path.sep)[-1]:idx for idx, key in enumerate(data_cls, start=0)}
 	# idx2cls  = {value:key for key, value in cls2idx.items()}
 
-	with open('data/eeg/image/data.pkl', 'rb') as file:
+	with open('../../data/b2i_data/eeg/image/data.pkl', 'rb') as file:
 		data = pickle.load(file, encoding='latin1')
 		train_X = data['x_train']
 		train_Y = data['y_train']
@@ -71,31 +71,30 @@ if __name__ == '__main__':
 	triplenet = TripleNet(n_classes=n_classes)
 	opt     = tf.keras.optimizers.Adam(learning_rate=3e-4)
 	triplenet_ckpt    = tf.train.Checkpoint(step=tf.Variable(1), model=triplenet, optimizer=opt)
-	triplenet_ckptman = tf.train.CheckpointManager(triplenet_ckpt, directory='experiments/best_ckpt', max_to_keep=5000)
-	triplenet_ckpt.restore(triplenet_ckptman.latest_checkpoint)
-	START = int(triplenet_ckpt.step) // len(train_batch)
-	if triplenet_ckptman.latest_checkpoint:
-		print('Restored from the latest checkpoint, epoch: {}'.format(START))
+	triplenet_ckpt.restore('experiments/best_ckpt/ckpt-89')
 
-	EPOCHS = 3000
-	cfreq  = 178 # Checkpoint frequency
-	test_loss = tf.keras.metrics.Mean()
-	test_acc  = tf.keras.metrics.SparseCategoricalAccuracy()
 	tq = tqdm(test_batch)
-	feat_X = []
-	feat_Y = []
+	feat_X  = np.array([])
+	feat_Y  = np.array([])
 	for idx, (X, Y) in enumerate(tq, start=1):
 		_, feat = triplenet(X, training=False)
-		feat_X.extend(feat.numpy())
-		feat_Y.extend(Y.numpy())
-	feat_X = np.array(feat_X)
-	feat_Y = np.array(feat_Y)
+		feat_X = np.concatenate((feat_X, feat.numpy()), axis=0) if feat_X.size else feat.numpy()
+		feat_Y = np.concatenate((feat_Y, Y.numpy()), axis=0) if feat_Y.size else Y.numpy()
+
 	print(feat_X.shape, feat_Y.shape)
 	# colors = list(plt.cm.get_cmap('viridis', 10))
 	# print(colors)
 	# colors  = [np.random.rand(3,) for _ in range(10)]
 	# print(colors)
 	# Y_color = [colors[label] for label in feat_Y]
+	kmeans = KMeans(n_clusters=n_classes,random_state=45)
+	kmeans.fit(feat_X)
+	labels = kmeans.labels_
+	kmeanacc = cluster_acc(feat_Y, labels)
+	# correct_labels = sum(feat_Y == labels)
+	# print("Result: %d out of %d samples were correctly labeled." % (correct_labels, feat_Y.shape[0]))
+	# kmeanacc = correct_labels/float(feat_Y.shape[0])
+	print('Accuracy score: {0:0.2f}'. format(kmeanacc))
 
 	tsne = TSNE(n_components=2, verbose=1, perplexity=40, n_iter=700)
 	tsne_results = tsne.fit_transform(feat_X)
@@ -152,21 +151,11 @@ if __name__ == '__main__':
 	# x = np.linspace(min_x, max_x, 50)
 	# y = W[4][1]*x + W[4][0]
 	# plt.plot(x, y, c=colors[4])
-	
-	# plt.savefig('experiments/embedding.png')
-
-	plt.show()
-
 	# plt.clf()
 	# plt.close()
 	# featX = df[['x1', 'x2']].to_numpy()
 	# print(featX.shape)
 
-	kmeans = KMeans(n_clusters=n_classes,random_state=45)
-	kmeans.fit(feat_X)
-	labels = kmeans.labels_
-	kmeanacc = cluster_acc(feat_Y, labels)
-	# correct_labels = sum(feat_Y == labels)
-	# print("Result: %d out of %d samples were correctly labeled." % (correct_labels, feat_Y.shape[0]))
-	# kmeanacc = correct_labels/float(feat_Y.shape[0])
-	print('Accuracy score: {0:0.2f}'. format(kmeanacc))
+	plt.title('k-means accuracy: {}%'.format(kmeanacc*100))
+	plt.savefig('experiments/embedding.png')
+	# plt.show()

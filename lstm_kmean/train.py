@@ -17,7 +17,7 @@ from sklearn.cluster import KMeans
 style.use('seaborn')
 
 os.environ["CUDA_DEVICE_ORDER"]= "PCI_BUS_ID"
-os.environ["CUDA_VISIBLE_DEVICES"]= '1'
+os.environ["CUDA_VISIBLE_DEVICES"]= '3'
 
 np.random.seed(45)
 tf.random.set_seed(45)
@@ -33,7 +33,7 @@ if __name__ == '__main__':
 	# cls2idx  = {key.split(os.path.sep)[-1]:idx for idx, key in enumerate(data_cls, start=0)}
 	# idx2cls  = {value:key for key, value in cls2idx.items()}
 
-	with open('data/eeg/image/data.pkl', 'rb') as file:
+	with open('../../data/b2i_data/eeg/image/data.pkl', 'rb') as file:
 		data = pickle.load(file, encoding='latin1')
 		train_X = data['x_train']
 		train_Y = data['y_train']
@@ -59,90 +59,92 @@ if __name__ == '__main__':
 	if triplenet_ckptman.latest_checkpoint:
 		print('Restored from the latest checkpoint, epoch: {}'.format(START))
 	EPOCHS = 3000
-	cfreq  = 178 # Checkpoint frequency
-	# for epoch in range(START, EPOCHS):
-	# 	train_acc  = tf.keras.metrics.SparseCategoricalAccuracy()
-	# 	train_loss = tf.keras.metrics.Mean()
-	# 	test_acc   = tf.keras.metrics.SparseCategoricalAccuracy()
-	# 	test_loss  = tf.keras.metrics.Mean()
+	cfreq  = 10 # Checkpoint frequency
 
-		# tq = tqdm(train_batch)
-		# for idx, (X, Y) in enumerate(tq, start=1):
-		# 	loss = train_step(triplenet, opt, X, Y)
-		# 	train_loss.update_state(loss)
-		# 	# Y_cap = triplenet(X, training=False)
-		# 	# train_acc.update_state(Y, Y_cap)
-		# 	triplenet_ckpt.step.assign_add(1)
-		# 	if (idx%cfreq) == 0:
-		# 		triplenet_ckptman.save()
-		# 	# tq.set_description('Train Epoch: {}, Loss: {}, Acc: {}'.format(epoch, train_loss.result(), train_acc.result()))
-		# 	tq.set_description('Train Epoch: {}, Loss: {}'.format(epoch, train_loss.result()))
-		# 	# break
+	for epoch in range(START, EPOCHS):
+		train_acc  = tf.keras.metrics.SparseCategoricalAccuracy()
+		train_loss = tf.keras.metrics.Mean()
+		test_acc   = tf.keras.metrics.SparseCategoricalAccuracy()
+		test_loss  = tf.keras.metrics.Mean()
 
-		# tq = tqdm(val_batch)
-		# for idx, (X, Y) in enumerate(tq, start=1):
-		# 	loss = test_step(triplenet, X, Y)
-		# 	test_loss.update_state(loss)
-		# 	# Y_cap = triplenet(X, training=False)
-		# 	# test_acc.update_state(Y, Y_cap)
-		# 	# tq.set_description('Test Epoch: {}, Loss: {}'.format(epoch, test_loss.result(), test_acc.result()))
-		# 	tq.set_description('Test Epoch: {}, Loss: {}'.format(epoch, test_loss.result()))
-		# 	# break
+		tq = tqdm(train_batch)
+		for idx, (X, Y) in enumerate(tq, start=1):
+			loss = train_step(triplenet, opt, X, Y)
+			train_loss.update_state(loss)
+			# Y_cap = triplenet(X, training=False)
+			# train_acc.update_state(Y, Y_cap)
+			# tq.set_description('Train Epoch: {}, Loss: {}, Acc: {}'.format(epoch, train_loss.result(), train_acc.result()))
+			tq.set_description('Train Epoch: {}, Loss: {}'.format(epoch, train_loss.result()))
+			# break
 
-	kmeanacc = 0.0
-	tq = tqdm(test_batch)
-	feat_X = []
-	feat_Y = []
-	for idx, (X, Y) in enumerate(tq, start=1):
-		_, feat = triplenet(X, training=False)
-		feat_X.extend(feat.numpy())
-		feat_Y.extend(Y.numpy())
-	feat_X = np.array(feat_X)
-	feat_Y = np.array(feat_Y)
-	print(feat_X.shape, feat_Y.shape)
-	# colors = list(plt.cm.get_cmap('viridis', 10))
-	# print(colors)
-	# colors  = [np.random.rand(3,) for _ in range(10)]
-	# print(colors)
-	# Y_color = [colors[label] for label in feat_Y]
+		tq = tqdm(val_batch)
+		for idx, (X, Y) in enumerate(tq, start=1):
+			loss = test_step(triplenet, X, Y)
+			test_loss.update_state(loss)
+			# Y_cap = triplenet(X, training=False)
+			# test_acc.update_state(Y, Y_cap)
+			# tq.set_description('Test Epoch: {}, Loss: {}'.format(epoch, test_loss.result(), test_acc.result()))
+			tq.set_description('Test Epoch: {}, Loss: {}'.format(epoch, test_loss.result()))
+			# break
+   
+		triplenet_ckpt.step.assign_add(1)
+		if (epoch%cfreq) == 0:
+			triplenet_ckptman.save()
 
-	tsne = TSNE(n_components=2, verbose=1, perplexity=40, n_iter=700)
-	tsne_results = tsne.fit_transform(feat_X)
-	df = pd.DataFrame()
-	df['label'] = feat_Y
-	df['x1'] = tsne_results[:, 0]
-	df['x2'] = tsne_results[:, 1]
-	# df['x3'] = tsne_results[:, 2]
-	df.to_csv('experiments/inference/triplet_embed2D.csv')
+	# kmeanacc = 0.0
+	# tq = tqdm(test_batch)
+	# feat_X = []
+	# feat_Y = []
+	# for idx, (X, Y) in enumerate(tq, start=1):
+	# 	_, feat = triplenet(X, training=False)
+	# 	feat_X.extend(feat.numpy())
+	# 	feat_Y.extend(Y.numpy())
+	# feat_X = np.array(feat_X)
+	# feat_Y = np.array(feat_Y)
+	# print(feat_X.shape, feat_Y.shape)
+	# # colors = list(plt.cm.get_cmap('viridis', 10))
+	# # print(colors)
+	# # colors  = [np.random.rand(3,) for _ in range(10)]
+	# # print(colors)
+	# # Y_color = [colors[label] for label in feat_Y]
+
+	# tsne = TSNE(n_components=2, verbose=1, perplexity=40, n_iter=700)
+	# tsne_results = tsne.fit_transform(feat_X)
+	# df = pd.DataFrame()
+	# df['label'] = feat_Y
+	# df['x1'] = tsne_results[:, 0]
+	# df['x2'] = tsne_results[:, 1]
+	# # df['x3'] = tsne_results[:, 2]
+	# df.to_csv('experiments/inference/triplet_embed2D.csv')
 	
-	# df.to_csv('experiments/triplenet_embed3D.csv')
-	# df = pd.read_csv('experiments/triplenet_embed2D.csv')
+	# # df.to_csv('experiments/triplenet_embed3D.csv')
+	# # df = pd.read_csv('experiments/triplenet_embed2D.csv')
 	
-	df = pd.read_csv('experiments/inference/triplet_embed2D.csv')
+	# df = pd.read_csv('experiments/inference/triplet_embed2D.csv')
 
-	plt.figure(figsize=(16,10))
+	# plt.figure(figsize=(16,10))
 	
-	# ax = plt.axes(projection='3d')
-	sns.scatterplot(
-	    x="x1", y="x2",
-	    data=df,
-	    hue='label',
-	    palette=sns.color_palette("hls", n_classes),
-	    legend="full",
-	    alpha=0.4
-	    )
+	# # ax = plt.axes(projection='3d')
+	# sns.scatterplot(
+	#     x="x1", y="x2",
+	#     data=df,
+	#     hue='label',
+	#     palette=sns.color_palette("hls", n_classes),
+	#     legend="full",
+	#     alpha=0.4
+	#     )
 
-	plt.show()
-	# plt.savefig('experiments/inference/{}_embedding.png'.format(epoch))
+	# plt.show()
+	# # plt.savefig('experiments/inference/{}_embedding.png'.format(epoch))
 
-	kmeans = KMeans(n_clusters=n_classes,random_state=45)
-	kmeans.fit(feat_X)
-	labels = kmeans.labels_
-	# print(feat_Y, labels)
-	correct_labels = sum(feat_Y == labels)
-	print("Result: %d out of %d samples were correctly labeled." % (correct_labels, feat_Y.shape[0]))
-	kmeanacc = correct_labels/float(feat_Y.shape[0])
-	print('Accuracy score: {0:0.2f}'. format(kmeanacc))
+	# kmeans = KMeans(n_clusters=n_classes,random_state=45)
+	# kmeans.fit(feat_X)
+	# labels = kmeans.labels_
+	# # print(feat_Y, labels)
+	# correct_labels = sum(feat_Y == labels)
+	# print("Result: %d out of %d samples were correctly labeled." % (correct_labels, feat_Y.shape[0]))
+	# kmeanacc = correct_labels/float(feat_Y.shape[0])
+	# print('Accuracy score: {0:0.2f}'. format(kmeanacc))
 
 	# with open('experiments/triplenet_log.txt', 'a') as file:
 	# 	file.write('E: {}, Train Loss: {}, Test Loss: {}, KM Acc: {}\n'.\
